@@ -14,7 +14,8 @@ const tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
 form.addEventListener("submit", adicionarTarefa);
 
 // Funções
-function adicionarTarefa() {
+function adicionarTarefa(event) {
+    event.preventDefault();
     const texto = inputTarefa.value.trim();
     if (texto === "") {
         alert("Digite uma tarefa!");
@@ -26,4 +27,15 @@ function adicionarTarefa() {
         concluida: false
     };
     tarefas.push(novaTarefa);
+    salvarTarefa();
+    inputTarefa.value = "";
+    inputTarefa.focus();
+    console.log(novaTarefa);
+}
+
+function salvarTarefa() {
+    localStorage.setItem(
+        "tarefas",
+        JSON.stringify(tarefas)
+    );
 }
