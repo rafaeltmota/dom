@@ -16,6 +16,7 @@ form.addEventListener("submit", adicionarTarefa);
 // Funções
 function adicionarTarefa(event) {
     event.preventDefault();
+    
     const texto = inputTarefa.value.trim();
     if (texto === "") {
         alert("Digite uma tarefa!");
@@ -35,6 +36,7 @@ function adicionarTarefa(event) {
 }
 
 function renderizarTarefas() {
+    listaTarefas.textContent = "";
     tarefas.forEach(function (tarefa, indice){
         const linha = document.createElement("tr");
         const colunaNumero = document.createElement("td");
@@ -51,14 +53,45 @@ function renderizarTarefas() {
        
         const colunaStatus = document.createElement("td");
         if (tarefa.concluida) {
-            colunaStatus.innerHTML = '<span class="badge text-bg-success>Concluída</span>';
+            colunaStatus.innerHTML = '<span class="badge text-bg-success">Concluída</span>';
         } else {
-            colunaStatus.innerHTML = '<span class="badge text-bg-warning>Pendente</span>'
+            colunaStatus.innerHTML = '<span class="badge text-bg-warning">Pendente</span>';
         }
 
+        const colunaAcoes = document.createElement("td");
+
+        const botaoConcluir = document.createElement("button");
+        botaoConcluir.textContent =
+            tarefa.concluida
+                ? "Reabrir"
+                : "Concluir";
+        botaoConcluir.classList.add(
+            "btn",
+            tarefa.concluida
+                ? "btn-warning"
+                : "btn-success",
+            "btn-sm",
+            "me-2"
+        );
+
+        botaoConcluir.addEventListener(
+            "click",
+            function() {
+                alterarStatus(tarefa.id);
+            }
+        )
+
+
+        const botaoExcluir = document.createElement("button")
+        const botaoEditar = document.createElement("button")
+
+
+        colunaAcoes.appendChild(botaoConcluir);
+
         linha.appendChild(colunaNumero);
-        linha.appendChild(colunaNome);
         linha.appendChild(colunaStatus);
+        linha.appendChild(colunaNome);
+        linha.appendChild(colunaAcoes);
 
         listaTarefas.appendChild(linha);
     });
@@ -71,3 +104,13 @@ function salvarTarefa() {
     );
 }
 
+function alterarStatus(id) {
+    tarefas.forEach(function(tarefa) {
+        if (tarefa.id === id) {
+            tarefa.concluida = !tarefa.concluida
+        }
+    }); 
+    salvarTarefa();
+    renderizarTarefas();
+};
+renderizarTarefas();
