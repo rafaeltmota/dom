@@ -59,6 +59,7 @@ function renderizarTarefas() {
         }
 
         const colunaAcoes = document.createElement("td");
+        colunaAcoes.classList.add("text-center")
 
         const botaoConcluir = document.createElement("button");
         botaoConcluir.textContent =
@@ -79,14 +80,40 @@ function renderizarTarefas() {
             function() {
                 alterarStatus(tarefa.id);
             }
+        );
+
+        const botaoEditar = document.createElement("button")
+        botaoEditar.textContent = "Editar";
+        botaoEditar.classList.add(
+            "btn",
+            "btn-primary",
+            "btn-sm",
+            "me-2"
+        );
+        botaoEditar.addEventListener(
+            "click",
+            function(){
+                editarTarefa(tarefa.id);
+            }
+        )
+        const botaoExcluir = document.createElement("button")
+        botaoExcluir.textContent = "Excluir";
+        botaoExcluir.classList.add(
+            "btn",
+            "btn-danger",
+            "btn-sm",
+            "me-2"
+        );
+        botaoExcluir.addEventListener(
+            "click",
+            function(){
+                excluirTarefa(tarefa.id);
+            }
         )
 
-
-        const botaoExcluir = document.createElement("button")
-        const botaoEditar = document.createElement("button")
-
-
         colunaAcoes.appendChild(botaoConcluir);
+        colunaAcoes.appendChild(botaoEditar);
+        colunaAcoes.appendChild(botaoExcluir);
 
         linha.appendChild(colunaNumero);
         linha.appendChild(colunaStatus);
@@ -95,6 +122,7 @@ function renderizarTarefas() {
 
         listaTarefas.appendChild(linha);
     });
+    atualizarContador();
 }
 
 function salvarTarefa() {
@@ -112,5 +140,43 @@ function alterarStatus(id) {
     }); 
     salvarTarefa();
     renderizarTarefas();
-};
+}
+
+function atualizarContador() {
+    const quantidade = tarefas.length;
+    if (quantidade === 1) {
+        contador.textContent = "1 Tarefa"
+        
+    } else {
+        contador.textContent = 
+        quantidade + " Tarefas";
+    }
+}
+
+function editarTarefa(id) {
+    const tarefa = tarefas.find(function (tarefa) {
+        return tarefa.id === id;
+    });
+    const novoTexto = prompt("Digite o novo nome da tarefa:", tarefa.texto).trim();
+    if (novoTexto === "") {
+        alert("A tarefa não pode ficar vazia")
+        return
+    }
+    tarefa.texto = novoTexto;
+    salvarTarefa();
+    renderizarTarefas();
+}
+
+function excluirTarefa(id) {
+    const confirmar = confirm("Tem certeza que deseja excluir a tarefa?")
+    if (!confirmar) {
+        return;
+    }
+
+    tarefas = tarefas.filter(function (tarefa) {
+        return tarefa.id !== id;
+    })
+}
+
+
 renderizarTarefas();
