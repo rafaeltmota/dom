@@ -7,7 +7,7 @@ const listaTarefas = document.querySelector("#lista-tarefas");
 
 // Resgate de tarefas do localStorage
 
-const tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
 
 //Ouvir a agir sobre o clique
 
@@ -176,6 +176,9 @@ function excluirTarefa(id) {
     tarefas = tarefas.filter(function (tarefa) {
         return tarefa.id !== id;
     })
+
+    salvarTarefa();
+    renderizarTarefas();
 }
 
 
